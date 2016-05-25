@@ -7,10 +7,13 @@ import shell from 'shelljs';
 import path from 'path';
 
 
+
+
 // shell commands
 const {
-	ls,
+	echo,
 	error,
+	ls,
 	mkdir,
 	tempdir
 } = shell;
@@ -34,24 +37,19 @@ const FILE = OUTPUT.substr(OUTPUT.lastIndexOf('/') + 1);
 const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
 
 
+
 // Create directories
 function mkDir (paths) {
 	if (Array.isArray(paths)) {
 		paths.forEach(path => {
 			if (ls(path) && error()) {
-				/*eslint-disable no-console */
-				console.log(`Creating directory ${path}`);
-				/*eslint-enable no-console */
-
+				echo(`Creating directory ${path}`);
 				mkdir('-p', path);
 			}
 		});
 	} else {
 		if (ls(paths) && error()) {
-			/*eslint-disable no-console */
-			console.log(`Creating directory ${path}`);
-			/*eslint-enable no-console */
-
+			echo(`Creating directory ${path}`);
 			mkdir('-p', paths);
 		}
 	}
@@ -61,11 +59,11 @@ function mkDir (paths) {
 // Process postcss
 const processCSS = (css) => {
 	postcss(...PLUGINS.map(plugin => require(plugin)))
-	 .process(css)
-	 .then(function (result) {
-	     fs.writeFile(OUTPUT, result.css);
-	     if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
-	 });
+		.process(css)
+		.then(function (result) {
+			fs.writeFile(OUTPUT, result.css);
+			if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+		});
 };
 
 
@@ -75,9 +73,7 @@ const concatFiles = (err, contents) => {
 
 		fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
 			if (err) {
-				/*eslint-disable no-console */
-				return console.log(err);
-				/*eslint-enable no-console */
+				return echo(err);
 			}
 
 			processCSS(data);
