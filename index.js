@@ -4,13 +4,11 @@ import minimist from 'minimist';
 import concat from 'concat-files';
 import glob from "glob";
 import shell from 'shelljs';
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 import path from 'path';
 
 
 // shell commands
-const { 
+const {
 	ls,
 	error,
 	mkdir,
@@ -74,7 +72,7 @@ const processCSS = (css) => {
 // Concatenate files
 const concatFiles = (err, contents) => {
 	concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
-		
+
 		fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
 			if (err) {
 				/*eslint-disable no-console */
