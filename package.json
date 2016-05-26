@@ -16,7 +16,7 @@
     "build:watch": "watch 'npm run build' ./src",
     "lint": "eslint --quiet ./src  || true",
     "lint:watch": "watch 'npm run lint' ./",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build"
   },
   "author": "Otis Virginie",
   "repository": "git@github.com:otissv/postcss-build.git",
