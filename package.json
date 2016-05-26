@@ -2,7 +2,10 @@
   "name": "postcss-build",
   "version": "1.0.1",
   "description": "PostCSS cli build tool",
-  "main": "lib/index.js",
+  "main": "index.js",
+  "bin": {
+    "cli": "./bin/cli"
+  },
   "keywords": [
     "postcss",
     "css",
