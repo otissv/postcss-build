@@ -38,16 +38,17 @@ function config (option) {
 
 
 // Argument constants
-const OUTPUT = argv.output || argv.o || config('output');
-const SOURCE = argv.src || argv.s || config('src');
-const PLUGINS = argv.plugins || argv.p || config('plugins');
+const DIR = argv.dir || argv.d || config('dir');
 const OPTIONS = argv.options || argv.opts || config('options');
-const TMP_DIR = `${tempdir()}/postcssbuild`;
+const OUTPUT = argv.output || argv.o || config('output');
 const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
+const PLUGINS = argv.plugins || argv.p || config('plugins');
+const SOURCE = argv.src || argv.s || config('src');
+const TMP_DIR = `${tempdir()}/postcssbuild`;
 
 
 // If no source or exit files print help text
-if (SOURCE == undefined || OUTPUT == undefined) {
+if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
 	help();
 }
 
@@ -83,8 +84,8 @@ function processCSS (css) {
 
 // Concatenate files
 function concatFiles (err, contents) {
-	concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
 
+	concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
 		fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
 			if (err) {
 				return echo(err);
@@ -98,13 +99,20 @@ function concatFiles (err, contents) {
 
 // Help
 function help () {
-	echo(`Postcss build help:
-Usage: pcss <command>
+	echo(`Usage: pcss <command>
 
 where <command> is one of:
--c, --config	-h, --help, -s, --src, -t, --options, -o, --output, -p, --plugins, -w, --watch
+\t-c, --config, -d, --dir, -h, --help, -s, --src, -t,
+\t--options, -o, --output, -p, --plugins
 
-pcss -h, --help\t
+pcss -c or --config\t /path/to/file\t\t configuration file
+pcss -d or --dir\t /path/to/folder\t source directory
+pcss -h or --help\t\t\t\t displays this help text
+pcss -s or --src\t /path/to/file\t\t source file
+pcss -t or --options\t\t\t\t plugin options
+pcss -o or --output\t /path/to/file\t\t output file
+pcss -p or --plugins\t ['plugin', 'names']\t\t postcss plugins
+
 `);
 	exit();
 }
@@ -113,4 +121,8 @@ pcss -h, --help\t
 // Make directories
 mkDir([ TMP_DIR, OUTPUT_DIR ]);
 
-glob(`${SOURCE}/**/*.css`, {}, concatFiles);
+if (SOURCE) {
+	concatFiles(null, [SOURCE]);
+} else {
+	glob(`${DIR}/**/*.css`, {}, concatFiles);
+}
