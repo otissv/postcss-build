@@ -3,9 +3,9 @@ A postcss cli build tool. Useful if you use npm as a build tool.
 
 ## Usage
 ```
-$ npm install postcss-build --save-dev
+$ npm install -g postcss-build --save-dev
 
-$node node_modules/postcss-build --src main.css --output main.min.css --plugins [ "autoprefixer", "cssnano" ]
+$ postcss-build --src main.css --output main.min.css --plugins [ "autoprefixer", "cssnano" ]
 ```
 
 
