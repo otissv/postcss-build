@@ -7,99 +7,100 @@ import path from 'path';
 import postcss from 'postcss';
 import shell from 'shelljs';
 
+(function() {
 
-// shell commands
-const {
-	echo,
-	error,
-	exit,
-	ls,
-	mkdir,
-	tempdir
-} = shell;
-
-
-// CLI arguments
-const argv = minimist(process.argv.slice(2));
+	// shell commands
+	const {
+		echo,
+		error,
+		exit,
+		ls,
+		mkdir,
+		tempdir
+	} = shell;
 
 
-// Print help
-if (argv == undefined || argv['help'] || argv['h']) {
-	help();
-}
+	// CLI arguments
+	const argv = minimist(process.argv.slice(2));
 
 
-// Get config options
-function config (option) {
-	if (argv.config || argv.c) {
-		return require(path.resolve(`${argv.config}`))[option];
+	// Print help
+	if (argv == undefined || argv['help'] || argv['h']) {
+		help();
 	}
-}
 
 
-// Argument constants
-const DIR = argv.dir || argv.d || config('dir');
-const OPTIONS = argv.options || argv.opts || config('options');
-const OUTPUT = argv.output || argv.o || config('output');
-const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
-const PLUGINS = argv.plugins || argv.p || config('plugins');
-const SOURCE = argv.src || argv.s || config('src');
-const TMP_DIR = `${tempdir()}/postcssbuild`;
-
-
-// If no source or exit files print help text
-if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
-	help();
-}
-
-
-// Create directories
-function mkDir (paths) {
-	if (Array.isArray(paths)) {
-		paths.forEach(path => {
-			if (ls(path) && error()) {
-				echo(`Creating directory ${path}`.blue);
-				mkdir('-p', path);
-			}
-		});
-	} else {
-		if (ls(paths) && error()) {
-			echo(`Creating directory ${path}`.blue);
-			mkdir('-p', paths);
+	// Get config options
+	function config (option) {
+		if (argv.config || argv.c) {
+			return require(path.resolve(`${argv.config}`))[option];
 		}
 	}
-}
 
 
-// Process postcss
-function processCSS (css) {
-	postcss(...PLUGINS.map(plugin => require(plugin)(OPTIONS[plugin])))
-		.process(css)
-		.then(function (result) {
-			fs.writeFile(OUTPUT, result.css);
-			if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
-		});
-}
+	// Argument constants
+	const DIR = argv.dir || argv.d || config('dir');
+	const OPTIONS = argv.options || argv.opts || config('options');
+	const OUTPUT = argv.output || argv.o || config('output');
+	const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
+	const PLUGINS = argv.plugins || argv.p || config('plugins');
+	const SOURCE = argv.src || argv.s || config('src');
+	const TMP_DIR = `${tempdir()}/postcssbuild`;
 
 
-// Concatenate files
-function concatFiles (err, contents) {
+	// If no source or exit files print help text
+	if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
+		help();
+	}
 
-	concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
-		fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
-			if (err) {
-				return echo(err);
+
+	// Create directories
+	function mkDir (paths) {
+		if (Array.isArray(paths)) {
+			paths.forEach(path => {
+				if (ls(path) && error()) {
+					echo(`Creating directory ${path}`.blue);
+					mkdir('-p', path);
+				}
+			});
+		} else {
+			if (ls(paths) && error()) {
+				echo(`Creating directory ${path}`.blue);
+				mkdir('-p', paths);
 			}
+		}
+	}
 
-			processCSS(data);
+
+	// Process postcss
+	function processCSS (css) {
+		postcss(...PLUGINS.map(plugin => require(plugin)(OPTIONS[plugin])))
+			.process(css)
+			.then(function (result) {
+				fs.writeFile(OUTPUT, result.css);
+				if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+			});
+	}
+
+
+	// Concatenate files
+	function concatFiles (err, contents) {
+
+		concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
+			fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
+				if (err) {
+					return echo(err);
+				}
+
+				processCSS(data);
+			});
 		});
-	});
-}
+	}
 
 
-// Help
-function help () {
-	echo(`Usage: pcss <command>
+	// Help
+	function help () {
+		echo(`Usage: pcss <command>
 
 where <command> is one of:
 \t-c, --config, -d, --dir, -h, --help, -s, --src, -t,
@@ -113,16 +114,17 @@ pcss -t or --options\t\t\t\t plugin options
 pcss -o or --output\t /path/to/file\t\t output file
 pcss -p or --plugins\t ['plugin', 'names']\t\t postcss plugins
 
-`);
-	exit();
-}
+	`);
+		exit();
+	}
 
 
-// Make directories
-mkDir([ TMP_DIR, OUTPUT_DIR ]);
+	// Make directories
+	mkDir([ TMP_DIR, OUTPUT_DIR ]);
 
-if (SOURCE) {
-	concatFiles(null, [SOURCE]);
-} else {
-	glob(`${DIR}/**/*.css`, {}, concatFiles);
-}
+	if (SOURCE) {
+		concatFiles(null, [SOURCE]);
+	} else {
+		glob(`${DIR}/**/*.css`, {}, concatFiles);
+	}
+}).call(this);
