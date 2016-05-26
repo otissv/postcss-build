@@ -4,7 +4,7 @@
   "description": "PostCSS cli build tool",
   "main": "index.js",
   "bin": {
-    "cli": "./bin/cli"
+    "cli": "./bin"
   },
   "keywords": [
     "postcss",
