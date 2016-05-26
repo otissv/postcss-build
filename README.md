@@ -60,5 +60,8 @@ Example
 ## TODO
 - Tests
 
+## Credits
+[postcss-cli]('https://github.com/code42day/postcss-cli')
+
 ##License
 MIT
