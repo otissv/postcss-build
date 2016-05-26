@@ -33,7 +33,7 @@ Array of postcss plugins names
 
 
 ### Config
-Instead of using passing arguments via the cli they can be placed inside a JSON config file.
+Instead of passing arguments via the cli they can be placed inside a JSON config file.
 
 CLI arguments overrule config.
 
