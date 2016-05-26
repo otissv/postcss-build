@@ -5,7 +5,7 @@ A postcss cli build tool. Useful if you use npm as a build tool.
 ```
 $ npm install -g postcss-build --save-dev
 
-$ postcss-build --src main.css --output main.min.css --plugins [ "autoprefixer", "cssnano" ]
+$ postcssbuild --src main.css --output main.min.css --plugins [ "autoprefixer", "cssnano" ]
 ```
 
 
