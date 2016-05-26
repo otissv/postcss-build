@@ -15,7 +15,8 @@
     "build": "babel src/index.js --out-file lib/index.js",
     "build:watch": "watch 'npm run build' ./src",
     "lint": "eslint --quiet ./src  || true",
-    "lint:watch": "watch 'npm run lint' ./"
+    "lint:watch": "watch 'npm run lint' ./",
+    "prepublish": "npm run build",
   },
   "author": "Otis Virginie",
   "repository": "git@github.com:otissv/postcss-build.git",
