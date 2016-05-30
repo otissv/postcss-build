@@ -61,7 +61,7 @@ Example
 - Tests
 
 ## Credits
-[postcss-cli]('https://github.com/code42day/postcss-cli')
+[postcss]('https://github.com/postcss/postcss')
 
 ##License
 MIT
