@@ -1,12 +1,12 @@
 {
   "name": "postcss-build",
-  "version": "1.0.7",
+  "version": "1.0.6",
   "description": "PostCSS cli build tool",
   "main": "index.js",
   "bin": {
     "postcssbuild": "./bin/postcssbuild"
   },
-  "preferGlobal" : true,
+  "preferGlobal": true,
   "keywords": [
     "postcss",
     "css",
@@ -31,7 +31,7 @@
     "cssnano-cli": "~1.0.4",
     "glob": "~7.0.3",
     "minimist": "~1.2.0",
-    "postcss-cli": "~2.5.2",
+    "postcss": "~5.0.21",
     "shelljs": "~0.7.0"
   },
   "devDependencies": {
