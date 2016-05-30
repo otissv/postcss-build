@@ -1,6 +1,6 @@
 {
   "name": "postcss-build",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "PostCSS cli build tool",
   "main": "index.js",
   "bin": {
