@@ -1,5 +1,5 @@
 #PostCSS build
-A postcss cli build tool. Useful if you use npm as a build tool.
+A postcss cli build tool. Useful if you use npm as a build tool. As opposed to [postcss-cli](https://github.com/postcss/postcss-cli), PostCSS build can scan an entire directory and subdirectory for files.
 
 ## Usage
 ```
