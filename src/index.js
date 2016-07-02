@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import dedupe from 'dedupe';
 import fs from 'fs';
 import glob from "glob";
+import notifier from 'node-notifier';
 import minimist from 'minimist';
 import path from 'path';
 import postcss from 'postcss';
@@ -47,7 +48,7 @@ import shell from 'shelljs';
 	const PLUGINS = argv.plugins || argv.p || config('plugins');
 	const SOURCE = argv.src || argv.s || config('src');
 	const TMP_DIR = `${tempdir()}/postcssbuild`;
-
+	const NOTIFY = argv.notify || argv.n || config('notify');
 
 	// If no source or exit files print help text
 	if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
@@ -66,11 +67,18 @@ import shell from 'shelljs';
 
 		dedupe(report).forEach(mes => {
 			const text = mes.type === 'warning'
-			? chalk.yellow(mes.text)
-			: chalk.red(mes.text);
+			? chalk.yellow(`${mes.text}`)
+			: chalk.red(`{mes.text}`);
 
 			echo(`${mes.pos} ${text} [${mes.plugin}]`);
 		});
+
+		if (NOTIFY) {
+			notifier.notify({
+				title: 'PostCSS Build',
+				message: 'Error'
+			});
+		}
 	}
 
 
@@ -105,6 +113,12 @@ import shell from 'shelljs';
 			})
 			.catch(function (error) {
 				echo(error);
+				if (NOTIFY) {
+					notifier.notify({
+						title: 'PostCSS Build',
+						message: 'Error'
+					});
+				}
 			});
 	}
 
@@ -132,13 +146,14 @@ where <command> is one of:
 \t-c, --config, -d, --dir, -h, --help, -s, --src, -t,
 \t--options, -o, --output, -p, --plugins
 
-postcssbuild -c or --config\t /path/to/file\t\t configuration file
-postcssbuild -d or --dir\t /path/to/folder\t source directory
-postcssbuild -h or --help\t\t\t\t displays this help text
-postcssbuild -s or --src\t /path/to/file\t\t source file
-postcssbuild -t or --options\t\t\t\t plugin options
-postcssbuild -o or --output\t /path/to/file\t\t output file
-postcssbuild -p or --plugins\t ['plugin', 'names']\t\t postcss plugins
+postcssbuild -c or --config\t /path/to/file\t\t Configuration file
+postcssbuild -d or --dir\t /path/to/folder\t Source directory
+postcssbuild -h or --help\t\t\t\t Displays this help text
+postcssbuild -s or --src\t /path/to/file\t\t Source file
+postcssbuild -t or --options\t\t\t\t Plugin options
+postcssbuild -o or --output\t /path/to/file\t\t Output file
+postcssbuild -p or --plugins\t ['plugin', 'names']\t Postcss plugins
+postcssbuild -p or --notify\t\t\t\t System nofifications
 
 	`);
 		exit();
