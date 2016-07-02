@@ -79,6 +79,9 @@ import shell from 'shelljs';
 			.then(function (result) {
 				fs.writeFile(OUTPUT, result.css);
 				if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+			})
+			.catch(function (error) {
+				echo(error);
 			});
 	}
 
@@ -100,19 +103,19 @@ import shell from 'shelljs';
 
 	// Help
 	function help () {
-		echo(`Usage: pcss <command>
+		echo(`Usage: postcssbuild <command>
 
 where <command> is one of:
 \t-c, --config, -d, --dir, -h, --help, -s, --src, -t,
 \t--options, -o, --output, -p, --plugins
 
-pcss -c or --config\t /path/to/file\t\t configuration file
-pcss -d or --dir\t /path/to/folder\t source directory
-pcss -h or --help\t\t\t\t displays this help text
-pcss -s or --src\t /path/to/file\t\t source file
-pcss -t or --options\t\t\t\t plugin options
-pcss -o or --output\t /path/to/file\t\t output file
-pcss -p or --plugins\t ['plugin', 'names']\t\t postcss plugins
+postcssbuild -c or --config\t /path/to/file\t\t configuration file
+postcssbuild -d or --dir\t /path/to/folder\t source directory
+postcssbuild -h or --help\t\t\t\t displays this help text
+postcssbuild -s or --src\t /path/to/file\t\t source file
+postcssbuild -t or --options\t\t\t\t plugin options
+postcssbuild -o or --output\t /path/to/file\t\t output file
+postcssbuild -p or --plugins\t ['plugin', 'names']\t\t postcss plugins
 
 	`);
 		exit();
