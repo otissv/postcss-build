@@ -31,6 +31,9 @@ Path to output file
 -p or --plugins  
 Array of postcss plugins names
 
+-n or --notify
+Show system notifications
+
 
 ### Config
 Instead of passing arguments via the cli they can be placed inside a JSON config file.
