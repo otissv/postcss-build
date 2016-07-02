@@ -1,5 +1,6 @@
-import colors from 'colors';
 import concat from 'concat-files';
+import chalk from 'chalk';
+import dedupe from 'dedupe';
 import fs from 'fs';
 import glob from "glob";
 import minimist from 'minimist';
@@ -53,6 +54,25 @@ import shell from 'shelljs';
 		help();
 	}
 
+	function reporter (messages) {
+		const report = messages.map(mes => {
+			return {
+				pos: `Line ${mes.line}:${mes.column}`,
+				type: mes.type,
+				text: mes.text,
+				plugin: mes.plugin
+			};
+		});
+
+		dedupe(report).forEach(mes => {
+			const text = mes.type === 'warning'
+			? chalk.yellow(mes.text)
+			: chalk.red(mes.text);
+
+			echo(`${mes.pos} ${text} [${mes.plugin}]`);
+		});
+	}
+
 
 	// Create directories
 	function mkDir (paths) {
@@ -77,8 +97,11 @@ import shell from 'shelljs';
 		postcss(...PLUGINS.map(plugin => require(plugin)(OPTIONS[plugin])))
 			.process(css)
 			.then(function (result) {
-				fs.writeFile(OUTPUT, result.css);
-				if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+				if (result.messages) {
+					fs.writeFile(OUTPUT, result.css);
+					if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+					reporter(result.messages);
+				}
 			})
 			.catch(function (error) {
 				echo(error);
