@@ -11,28 +11,28 @@ $ postcssbuild --src main.css --output main.min.css --plugins [ "autoprefixer", 
 
 ### CLI options
 -c or --config  
-configuration file  
+Configuration file in JSON or CommonJS.  
 
 -d or --dir  
-Source directory  
+Source directory.  
 
 -h or --help  
 Displays help text  
 
 -s or --src  
-Path to source file  
+Path to a single source file or an array of paths to source files, where the array will be processed in sequence. --src overrules --dir;
 
 -t or --options  
-Plugin options  
+Plugin options.
 
 -o or --output  
-Path to output file  
+Path to output file.
 
 -p or --plugins  
-Array of postcss plugins names
+Array of postcss plugins names.
 
--n or --notify
-Show system notifications
+-n or --notify  
+Show errors in os notifications.
 
 
 ### Config
@@ -43,6 +43,8 @@ CLI arguments overrule config.
 Example
 ```
 {
+  "notify": true,
+
   "dir": "src/styles/",
 
   "output" : dist/styles/main.css,
@@ -60,8 +62,21 @@ Example
 }
 ```
 
-## TODO
-- Tests
+
+## Change Log
+All notable changes to this project will be documented in CHANGELOG.md.
+
+This project adheres to [Semantic Versioning](http://semver.org/).
+```
+{
+  "version": "1.1.0"
+}
+```
+MAJOR.MINOR.PATCH
+
+1. MAJOR: Breaking changes.  
+2. MINOR: New features.  
+3. PATCH: Bug fixes.
 
 ## Credits
 [postcss]('https://github.com/postcss/postcss')
