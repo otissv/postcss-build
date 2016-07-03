@@ -125,7 +125,6 @@ import shell from 'shelljs';
 
 	// Concatenate files
 	function concatFiles (err, contents) {
-
 		concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
 			fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
 				if (err) {
@@ -164,7 +163,10 @@ postcssbuild -p or --notify\t\t\t\t System nofifications
 	mkDir([ TMP_DIR, OUTPUT_DIR ]);
 
 	if (SOURCE) {
-		concatFiles(null, [SOURCE]);
+		Array.isArray(SOURCE)
+		? concatFiles(null, SOURCE)
+		: concatFiles(null, [SOURCE]);
+
 	} else {
 		glob(`${DIR}/**/*.css`, {}, concatFiles);
 	}
