@@ -164,7 +164,7 @@ postcssbuild -p or --notify\t\t\t\t System nofifications
 
 	if (SOURCE) {
 		Array.isArray(SOURCE)
-		? concatFiles(null, SOURCE)
+		? concatFiles(null, SOURCE) 
 		: concatFiles(null, [SOURCE]);
 
 	} else {
