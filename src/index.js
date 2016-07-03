@@ -148,7 +148,7 @@ where <command> is one of:
 postcssbuild -c or --config\t /path/to/file\t\t Configuration file
 postcssbuild -d or --dir\t /path/to/folder\t Source directory
 postcssbuild -h or --help\t\t\t\t Displays this help text
-postcssbuild -s or --src\t /path/to/file\t\t Source file
+postcssbuild -s or --src\t [/path/to/file]\t Source file(s)
 postcssbuild -t or --options\t\t\t\t Plugin options
 postcssbuild -o or --output\t /path/to/file\t\t Output file
 postcssbuild -p or --plugins\t ['plugin', 'names']\t Postcss plugins
