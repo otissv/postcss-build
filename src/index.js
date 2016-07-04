@@ -55,24 +55,32 @@ import shell from 'shelljs';
 		help();
 	}
 
-	function reporter (messages) {
-		const report = messages.map(mes => {
-			return {
-				pos: `Line ${mes.line}:${mes.column}`,
-				type: mes.type,
-				text: mes.text,
-				plugin: mes.plugin
+	//Report Errors
+	function reporter (errors) {		
+		// console.log(errors)
+		// remove duplicate errors
+		dedupe(errors).forEach(mes => {
+			const pos = mes.pos ? `Line ${mes.pos}` : '';
+			const type = mes.type ? mes.type : '';
+			const text = mes.text ? mes.text : '';
+			const plugin = mes.plugin ? mes.plugin : '';
+
+			const messageColor = (type) => {
+				return type === 'warning' ? 'yellow' : 'red';
 			};
+
+			let color = messageColor(type);
+
+
+			echo(chalk.blue('PossCSSBuild ============================================'));
+			
+			const typeColor = chalk[color](`${type}`);
+			const pluginColor = chalk[color](`${plugin}`);
+			echo(`${pos} [${pluginColor}] ${typeColor}`);
+			echo(chalk[color](`${text}`));
 		});
 
-		dedupe(report).forEach(mes => {
-			const text = mes.type === 'warning'
-			? chalk.yellow(`${mes.text}`)
-			: chalk.red(`{mes.text}`);
-
-			echo(`${mes.pos} ${text} [${mes.plugin}]`);
-		});
-
+		// System notification
 		if (NOTIFY) {
 			notifier.notify({
 				title: 'PostCSS Build',
@@ -108,18 +116,34 @@ import shell from 'shelljs';
 				if (result.messages) {
 					fs.writeFile(OUTPUT, result.css);
 					if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
-					reporter(result.messages);
+					
+					if (result.messages) {
+						reporter(result.messages.map(mes => {
+							return {
+								pos:  mes.line && mes.column ? `Line ${mes.line}:${mes.column}` : '',
+								type: mes.type,
+								text: mes.text,
+								plugin: mes.plugin
+							};
+						}));
+
+					} else {
+						if (NOTIFY) {
+							notifier.notify({
+								title: 'PostCSS Build',
+								message: 'Success'
+							});
+						}
+					}
 				}
 			})
 			.catch(function (error) {
-				echo(error);
-				if (NOTIFY) {
-					notifier.notify({
-						title: 'PostCSS Build',
-						message: 'Error'
-					});
-				}
-			});
+				reporter([{
+					pos:  `${error.line}:${error.column}`,
+					type: error.reason,
+					plugin: error.name
+				}]);
+});
 	}
 
 

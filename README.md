@@ -32,7 +32,7 @@ Path to output file.
 Array of postcss plugins names.
 
 -n or --notify  
-Show errors in os notifications.
+Show os notifications.
 
 
 ### Config
