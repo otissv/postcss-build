@@ -49,6 +49,7 @@ import shell from 'shelljs';
 	const SOURCE = argv.src || argv.s || config('src');
 	const TMP_DIR = `${tempdir()}/postcssbuild`;
 	const NOTIFY = argv.notify || argv.n || config('notify');
+	//const MAP = argv.map || argv.m || config('map');
 
 	// If no source or exit files print help text
 	if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
@@ -115,7 +116,7 @@ import shell from 'shelljs';
 			.then(function (result) {
 				if (result.messages) {
 					fs.writeFile(OUTPUT, result.css);
-					if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
+					//if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
 					
 					if (result.messages) {
 						reporter(result.messages.map(mes => {
@@ -172,11 +173,12 @@ where <command> is one of:
 postcssbuild -c or --config\t /path/to/file\t\t Configuration file
 postcssbuild -d or --dir\t /path/to/folder\t Source directory
 postcssbuild -h or --help\t\t\t\t Displays this help text
+postcssbuild -m or --map\t fileName\t Add source map inline
 postcssbuild -s or --src\t [/path/to/file]\t Source file(s)
 postcssbuild -t or --options\t\t\t\t Plugin options
 postcssbuild -o or --output\t /path/to/file\t\t Output file
 postcssbuild -p or --plugins\t ['plugin', 'names']\t Postcss plugins
-postcssbuild -p or --notify\t\t\t\t System nofifications
+postcssbuild -n or --notify\t\t\t\t System nofifications
 
 	`);
 		exit();
