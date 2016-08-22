@@ -1,14 +1,14 @@
 module.exports = {
 	"notify" : true,
-	
+
 	"src": "example/src/main.css",
-	
+
 	"output": "example/css/main.min.css",
 
-	"plugins": [ 
-	"autoprefixer",	
+	"plugins": [
+	"autoprefixer",
 	"precss",
-	"cssnano" 
+	"cssnano"
 	],
 
 	"options": {
@@ -19,4 +19,4 @@ module.exports = {
 
 		"cssnano": { "safe": true }
 	}
-}
+};

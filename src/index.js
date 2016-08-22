@@ -57,7 +57,7 @@ import shell from 'shelljs';
 	}
 
 	//Report Errors
-	function reporter (errors) {		
+	function reporter (errors) {
 		// console.log(errors)
 		// remove duplicate errors
 		dedupe(errors).forEach(mes => {
@@ -74,7 +74,7 @@ import shell from 'shelljs';
 
 
 			echo(chalk.blue('PossCSSBuild ============================================'));
-			
+
 			const typeColor = chalk[color](`${type}`);
 			const pluginColor = chalk[color](`${plugin}`);
 			echo(`${pos} [${pluginColor}] ${typeColor}`);
@@ -114,29 +114,26 @@ import shell from 'shelljs';
 		postcss(...PLUGINS.map(plugin => require(plugin)(OPTIONS[plugin])))
 			.process(css)
 			.then(function (result) {
-				if (result.messages) {
+				if (result.messages.length > 0) {
 					fs.writeFile(OUTPUT, result.css);
 					//if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
-					
-					if (result.messages) {
-						reporter(result.messages.map(mes => {
-							return {
-								pos:  mes.line && mes.column ? `Line ${mes.line}:${mes.column}` : '',
-								type: mes.type,
-								text: mes.text,
-								plugin: mes.plugin
-							};
-						}));
-
-					} else {
-						if (NOTIFY) {
-							notifier.notify({
-								title: 'PostCSS Build',
-								message: 'Success'
-							});
-						}
+					reporter(result.messages.map(mes => {
+						return {
+							pos:  mes.line && mes.column ? `Line ${mes.line}:${mes.column}` : '',
+							type: mes.type,
+							text: mes.text,
+							plugin: mes.plugin
+						};
+					}));
+				} else {
+					if (NOTIFY) {
+						notifier.notify({
+							title: 'PostCSS Build',
+							message: 'Success'
+						});
 					}
 				}
+
 			})
 			.catch(function (error) {
 				reporter([{
@@ -190,7 +187,7 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 
 	if (SOURCE) {
 		Array.isArray(SOURCE)
-		? concatFiles(null, SOURCE) 
+		? concatFiles(null, SOURCE)
 		: concatFiles(null, [SOURCE]);
 
 	} else {
