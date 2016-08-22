@@ -15,8 +15,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - memorization
-- process group of source files in sequence
-- proces from multiple source directories
+- process multiple groups of source files in sequence
+- process from source directories
 
 
 ## [1.0.1] - 2016-07-03
