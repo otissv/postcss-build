@@ -58,6 +58,11 @@ import watch from 'watch';
 		help();
 	}
 
+	// Wacthing message
+	function wathchinMessage () {
+		echo(`Watching files in ${WATCH}\n`);
+	}
+
 	//Report Errors
 	function reporter (errors) {
 		// console.log(errors)
@@ -75,7 +80,7 @@ import watch from 'watch';
 			let color = messageColor(type);
 
 
-			echo(chalk.blue('PossCSSBuild ============================================'));
+			echo(chalk.red('PossCSSBuild Error'));
 
 			const typeColor = chalk[color](`${type}`);
 			const pluginColor = chalk[color](`${plugin}`);
@@ -130,6 +135,8 @@ import watch from 'watch';
 
 				} else {
 					fs.writeFile(OUTPUT, result.css);
+					echo(chalk.cyan('PossCSS Build success'));
+					wathchinMessage();
 
 					if (NOTIFY) {
 						notifier.notify({
@@ -204,7 +211,8 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 	run();
 
 	if (WATCH) {
-		console.log('WATCHING...');
+		wathchinMessage();
+
 		watch.createMonitor(WATCH, function (monitor) {
 			monitor.files[`${WATCH}`];
 			monitor.on("created", function (f, stat) {
