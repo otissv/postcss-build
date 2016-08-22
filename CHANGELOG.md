@@ -3,11 +3,27 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## Not yet published
+### Removed
+- dudup & concat files
+
+### Change
+- postcss, autoprefixer, precss and cssnano as peer dependency
+
+### Patch
+- fixed shell messages
+
+### Added
+- memorization
+
+
 ## [1.0.1] - 2016-07-03
-- added dudup as a dependancy
+### Added
+- dudup as a dependency
+
 
 ## [1.1.0] - 2016-07-03
-## Added
+### Added
 - Error reporting.
 - System notification for errors.
 - Processing source files in sequence
