@@ -1,13 +1,14 @@
 .layout {
 	display: -webkit-box;
-	display: flex
+	display: flex;
+	color:red;
 }
 
 .content{
-	x
 	background-color: red;
 }
 .about {
   display: none;
+  
 }
 

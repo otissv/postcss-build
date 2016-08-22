@@ -10,6 +10,8 @@ import postcss from 'postcss';
 import shell from 'shelljs';
 import watch from 'watch';
 
+
+
 (function() {
 
 	// shell commands
@@ -22,6 +24,8 @@ import watch from 'watch';
 		tempdir
 	} = shell;
 
+	let changedFile;
+	let memoiseFiles = {};
 
 	// CLI arguments
 	const argv = minimist(process.argv.slice(2));
@@ -60,7 +64,7 @@ import watch from 'watch';
 
 	// Wacthing message
 	function wathchingMessage () {
-		echo(`Watching files in ${WATCH}\n`);
+		if (WATCH) echo(`Watching files in ${WATCH}\n`);
 	}
 
 	//Report Errors
@@ -159,7 +163,12 @@ import watch from 'watch';
 
 	// Concatenate files
 	function concatFiles (err, contents) {
+		if (changedFile) {
+			console.log('full');
+		}
+
 		concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
+
 			fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
 				if (err) {
 					return echo(err);
@@ -168,6 +177,45 @@ import watch from 'watch';
 				processCSS(data);
 			});
 		});
+	}
+
+
+	function forEachPromise (fn) {
+		return function (arr) {
+			let contents = arr.map((item, index) => {
+				return new Promise((resolve) => {
+					fn(resolve, item, index, arr);
+				});
+			});
+
+			return Promise.all(contents).then(res => [...new Set(res)]);
+		};
+	}
+
+
+	function getFileContents(err, filePaths) {
+		if (err) return echo(err);
+
+
+		const fn = (resolve, file, index, arr) => {
+			if (changedFile == null || changedFile === file) {
+				fs.readFile(file, 'utf8', function (err, data) {
+					if (err) return echo(err);
+					memoiseFiles[file] = data;
+					resolve(memoiseFiles);
+				});
+
+			} else {
+				resolve(memoiseFiles);
+			}
+		};
+
+
+		forEachPromise(fn)(filePaths)
+			.then(results => {
+				processCSS(Object.keys(results[0]).map((k,i) => results[0][k]).join(''));
+			})
+			.catch(err => echo(err));
 	}
 
 
@@ -200,26 +248,29 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 	function run() {
 		if (SOURCE) {
 			Array.isArray(SOURCE)
-			? concatFiles(null, SOURCE)
-			: concatFiles(null, [SOURCE]);
+			? getFileContents(null, SOURCE)
+			: getFileContents(null, [SOURCE]);
 
 		} else {
-			glob(`${DIR}/**/*.css`, {}, concatFiles);
+			glob(`${DIR}/**/*.css`, {}, getFileContents);
 		}
 	}
 
 	run();
 
-	if (WATCH) {
-		wathchingMessage();
 
+	wathchingMessage();
+
+	if (WATCH) {
 		watch.createMonitor(WATCH, function (monitor) {
 			monitor.files[`${WATCH}`];
 			monitor.on("created", function (f, stat) {
+				changedFile = f;
 				run();
 			});
 
 			monitor.on("changed", function (f, curr, prev) {
+				changedFile = f;
 				run();
 			});
 

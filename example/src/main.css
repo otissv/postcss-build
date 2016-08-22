@@ -1,9 +1,8 @@
 .layout {
-	display: flex
+	display: flex;
+	color:red;
 }
 
 .content{
-
-	d: :""
 	background-color: red;
 }
