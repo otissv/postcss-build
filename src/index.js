@@ -1,6 +1,5 @@
 import concat from 'concat-files';
 import chalk from 'chalk';
-import dedupe from 'dedupe';
 import fs from 'fs';
 import glob from "glob";
 import notifier from 'node-notifier';
@@ -69,9 +68,8 @@ import watch from 'watch';
 
 	//Report Errors
 	function reporter (errors) {
-		// console.log(errors)
 		// remove duplicate errors
-		dedupe(errors).forEach(mes => {
+		[...new Set(errors)].forEach(mes => {
 			const pos = mes.pos ? `Line ${mes.pos}` : '';
 			const type = mes.type ? mes.type : '';
 			const text = mes.text ? mes.text : '';
@@ -99,6 +97,19 @@ import watch from 'watch';
 				message: 'Error'
 			});
 		}
+	}
+
+	// forEach async
+	function forEachPromise (fn) {
+		return function (arr) {
+			let contents = arr.map((item, index) => {
+				return new Promise((resolve) => {
+					fn(resolve, item, index, arr);
+				});
+			});
+
+			return Promise.all(contents).then(res => [...new Set(res)]);
+		};
 	}
 
 
@@ -157,39 +168,7 @@ import watch from 'watch';
 					type: error.reason,
 					plugin: error.name
 				}]);
-});
-	}
-
-
-	// Concatenate files
-	function concatFiles (err, contents) {
-		if (changedFile) {
-			console.log('full');
-		}
-
-		concat(contents, `${TMP_DIR}/postcssbuild.css`, () => {
-
-			fs.readFile(`${TMP_DIR}/postcssbuild.css`, 'utf8', function (err, data) {
-				if (err) {
-					return echo(err);
-				}
-
-				processCSS(data);
 			});
-		});
-	}
-
-
-	function forEachPromise (fn) {
-		return function (arr) {
-			let contents = arr.map((item, index) => {
-				return new Promise((resolve) => {
-					fn(resolve, item, index, arr);
-				});
-			});
-
-			return Promise.all(contents).then(res => [...new Set(res)]);
-		};
 	}
 
 
