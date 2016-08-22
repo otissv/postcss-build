@@ -114,8 +114,8 @@ import shell from 'shelljs';
 		postcss(...PLUGINS.map(plugin => require(plugin)(OPTIONS[plugin])))
 			.process(css)
 			.then(function (result) {
+
 				if (result.messages.length > 0) {
-					fs.writeFile(OUTPUT, result.css);
 					//if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
 					reporter(result.messages.map(mes => {
 						return {
@@ -125,7 +125,10 @@ import shell from 'shelljs';
 							plugin: mes.plugin
 						};
 					}));
+
 				} else {
+					fs.writeFile(OUTPUT, result.css);
+					
 					if (NOTIFY) {
 						notifier.notify({
 							title: 'PostCSS Build',

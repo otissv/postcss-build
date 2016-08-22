@@ -1,3 +1,7 @@
 .layout {
 	display: flex
 }
+
+.content{
+	display: none;
+}

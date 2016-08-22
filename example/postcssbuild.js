@@ -17,6 +17,6 @@ module.exports = {
 			"cascade": false
 		},
 
-		"cssnano": { "safe": true }
+		// "cssnano": { "safe": true }
 	}
 };
