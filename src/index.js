@@ -59,7 +59,7 @@ import watch from 'watch';
 	}
 
 	// Wacthing message
-	function wathchinMessage () {
+	function wathchingMessage () {
 		echo(`Watching files in ${WATCH}\n`);
 	}
 
@@ -136,7 +136,7 @@ import watch from 'watch';
 				} else {
 					fs.writeFile(OUTPUT, result.css);
 					echo(chalk.cyan('PossCSS Build success'));
-					wathchinMessage();
+					wathchingMessage();
 
 					if (NOTIFY) {
 						notifier.notify({
@@ -211,7 +211,7 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 	run();
 
 	if (WATCH) {
-		wathchinMessage();
+		wathchingMessage();
 
 		watch.createMonitor(WATCH, function (monitor) {
 			monitor.files[`${WATCH}`];
