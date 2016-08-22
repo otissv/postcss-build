@@ -8,6 +8,7 @@ import minimist from 'minimist';
 import path from 'path';
 import postcss from 'postcss';
 import shell from 'shelljs';
+import watch from 'watch';
 
 (function() {
 
@@ -48,6 +49,7 @@ import shell from 'shelljs';
 	const PLUGINS = argv.plugins || argv.p || config('plugins');
 	const SOURCE = argv.src || argv.s || config('src');
 	const TMP_DIR = `${tempdir()}/postcssbuild`;
+	const WATCH = argv.watch || argv.w || config('watch');
 	const NOTIFY = argv.notify || argv.n || config('notify');
 	//const MAP = argv.map || argv.m || config('map');
 
@@ -128,7 +130,7 @@ import shell from 'shelljs';
 
 				} else {
 					fs.writeFile(OUTPUT, result.css);
-					
+
 					if (NOTIFY) {
 						notifier.notify({
 							title: 'PostCSS Build',
@@ -188,12 +190,35 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 	// Make directories
 	mkDir([ TMP_DIR, OUTPUT_DIR ]);
 
-	if (SOURCE) {
-		Array.isArray(SOURCE)
-		? concatFiles(null, SOURCE)
-		: concatFiles(null, [SOURCE]);
+	function run() {
+		if (SOURCE) {
+			Array.isArray(SOURCE)
+			? concatFiles(null, SOURCE)
+			: concatFiles(null, [SOURCE]);
 
-	} else {
-		glob(`${DIR}/**/*.css`, {}, concatFiles);
+		} else {
+			glob(`${DIR}/**/*.css`, {}, concatFiles);
+		}
 	}
+
+	run();
+
+	if (WATCH) {
+		console.log('WATCHING...');
+		watch.createMonitor(WATCH, function (monitor) {
+			monitor.files[`${WATCH}`];
+			monitor.on("created", function (f, stat) {
+				run();
+			});
+
+			monitor.on("changed", function (f, curr, prev) {
+				run();
+			});
+
+			monitor.on("removed", function (f, stat) {
+				run();
+			});
+		});
+	}
+
 }).call(this);

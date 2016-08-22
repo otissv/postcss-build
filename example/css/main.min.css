@@ -1,1 +1,12 @@
-.layout{display:-webkit-box;display:flex}.content{display:none}
+.layout {
+	display: -webkit-box;
+	display: flex
+}
+
+.content{
+	display: none;
+}
+.about {
+  display: none;
+}
+

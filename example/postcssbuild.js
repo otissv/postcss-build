@@ -1,14 +1,19 @@
 module.exports = {
 	"notify" : true,
 
-	"src": "example/src/main.css",
+	"watch" : "example/src/",
+
+	"src": [
+		"example/src/main.css",
+		"example/src/about/about.css",
+		"example/src/home/home.css"
+	],
 
 	"output": "example/css/main.min.css",
 
 	"plugins": [
 	"autoprefixer",
-	"precss",
-	"cssnano"
+	"precss"
 	],
 
 	"options": {
@@ -17,6 +22,6 @@ module.exports = {
 			"cascade": false
 		},
 
-		// "cssnano": { "safe": true }
+		"cssnano": { "safe": true }
 	}
 };
