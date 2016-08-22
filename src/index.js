@@ -1,4 +1,3 @@
-import concat from 'concat-files';
 import chalk from 'chalk';
 import fs from 'fs';
 import glob from "glob";
@@ -10,8 +9,7 @@ import shell from 'shelljs';
 import watch from 'watch';
 
 
-
-(function() {
+(function () {
 
 	// shell commands
 	const {
@@ -234,9 +232,9 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 			glob(`${DIR}/**/*.css`, {}, getFileContents);
 		}
 	}
+	
 
 	run();
-
 
 	wathchingMessage();
 
