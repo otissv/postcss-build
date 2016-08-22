@@ -1,8 +1,4 @@
-.layout {
+.main {
 	display: flex;
 	color:red;
-}
-
-.content{
-	background-color: red;
 }

@@ -9,7 +9,7 @@ import shell from 'shelljs';
 import watch from 'watch';
 
 
-(function () {
+(function() {
 
 	// shell commands
 	const {
@@ -172,7 +172,7 @@ import watch from 'watch';
 
 	function getFileContents(err, filePaths) {
 		if (err) return echo(err);
-
+		const flattenfilePaths = flatten(filePaths);
 
 		const fn = (resolve, file, index, arr) => {
 			if (changedFile == null || changedFile === file) {
@@ -188,9 +188,9 @@ import watch from 'watch';
 		};
 
 
-		forEachPromise(fn)(filePaths)
+		forEachPromise(fn)(flattenfilePaths)
 			.then(results => {
-				processCSS(Object.keys(results[0]).map((k,i) => results[0][k]).join(''));
+				processCSS(flattenfilePaths.map(i => results[0][i]).join(''));
 			})
 			.catch(err => echo(err));
 	}
@@ -222,6 +222,10 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 	// Make directories
 	mkDir([ TMP_DIR, OUTPUT_DIR ]);
 
+	function flatten (arr) {
+		return arr.reduce((a, b) => [...a.concat(b)], []);
+	}
+
 	function run() {
 		if (SOURCE) {
 			Array.isArray(SOURCE)
@@ -229,12 +233,23 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 			: getFileContents(null, [SOURCE]);
 
 		} else {
-			glob(`${DIR}/**/*.css`, {}, getFileContents);
+			if (Array.isArray(DIR)) {
+				const getFilePaths = (resolve, file, index, arr) => {
+					glob(`${file}/**/*.css`, {}, (err, paths) => resolve(paths));
+				};
+
+				forEachPromise(getFilePaths)(flatten(DIR))
+					.then(results => getFileContents(null, results));
+
+
+			} else {
+				glob(`${DIR}/**/*.css`, {}, getFileContents);
+			}
 		}
 	}
-	
 
 	run();
+
 
 	wathchingMessage();
 
