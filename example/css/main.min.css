@@ -2,6 +2,7 @@
 	display: -webkit-box;
 	display: flex;
 	color:red;
+	content: 'otis';
 }
 .about1 {
   display: none;
