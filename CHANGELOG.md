@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Change
 - postcss, autoprefixer, precss and cssnano as peer dependency
-
+- removed babel for rollup
 ### Patch
 - fixed shell messages
 
