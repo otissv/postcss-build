@@ -43,7 +43,10 @@ import watch from 'watch';
 
 
 	// Argument constants
+	const EXT = argv.ext || argv.e || config('map') || '.css';
 	const DIR = argv.dir || argv.d || config('dir');
+	// const MAP = argv.map || argv.m || config('map');
+	const NOTIFY = argv.notify || argv.n || config('notify');
 	const OPTIONS = argv.options || argv.opts || config('options');
 	const OUTPUT = argv.output || argv.o || config('output');
 	const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
@@ -51,8 +54,6 @@ import watch from 'watch';
 	const SOURCE = argv.src || argv.s || config('src');
 	const TMP_DIR = `${tempdir()}/postcssbuild`;
 	const WATCH = argv.watch || argv.w || config('watch');
-	const NOTIFY = argv.notify || argv.n || config('notify');
-	//const MAP = argv.map || argv.m || config('map');
 
 	// If no source or exit files print help text
 	if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
@@ -235,7 +236,7 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 		} else {
 			if (Array.isArray(DIR)) {
 				const getFilePaths = (resolve, file, index, arr) => {
-					glob(`${file}/**/*.css`, {}, (err, paths) => resolve(paths));
+					glob(`${file}/**/*${EXT}`, {}, (err, paths) => resolve(paths));
 				};
 
 				forEachPromise(getFilePaths)(flatten(DIR))
@@ -243,7 +244,7 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 
 
 			} else {
-				glob(`${DIR}/**/*.css`, {}, getFileContents);
+				glob(`${DIR}/**/*${EXT}`, {}, getFileContents);
 			}
 		}
 	}

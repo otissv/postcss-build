@@ -1,10 +1,12 @@
 module.exports = {
 	"notify" : true,
 
+	"ext": ".sass",
+
 	// "watch" : "example/src/",
 
 	"src": [
-		"example/src/main.css",
+		"example/src/main.sass",
 		[
 			"example/src/about/about1.css",
 			"example/src/about/about2.css"
