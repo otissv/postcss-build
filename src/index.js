@@ -272,4 +272,4 @@ postcssbuild -n or --notify\t\t\t\t System nofifications
 		});
 	}
 
-}).call(this);
+})();
