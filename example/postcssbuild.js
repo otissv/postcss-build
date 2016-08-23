@@ -1,12 +1,12 @@
 module.exports = {
 	"notify" : true,
 
-	"ext": ".sass",
+	"ext": ".css",
 
-	// "watch" : "example/src/",
+	"watch" : "example/src/",
 
 	"src": [
-		"example/src/main.sass",
+		"example/src/main.css",
 		[
 			"example/src/about/about1.css",
 			"example/src/about/about2.css"
@@ -17,12 +17,6 @@ module.exports = {
 		],
 		"example/src/content.css",
 	],
-
-
-	// "dir": [
-	// 	"example/src/about/",
-	// 	"example/src/home",
-	// ],
 
 	"output": "example/css/main.min.css",
 

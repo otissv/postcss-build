@@ -1,7 +1,11 @@
-#PostCSS build
-A postcss cli build tool. Useful if you use npm as a build tool. As opposed to [postcss-cli](https://github.com/postcss/postcss-cli), PostCSS build can scan an entire directory and subdirectory for files.
+#PostCSS Build
+A postcss cli build tool. Useful if you use npm as a build tool. As opposed to [postcss-cli](https://github.com/postcss/postcss-cli), PostCSS build can scan an entire directory and subdirectory for files as well as process files in sequence.
+
+
+
 
 ## Usage
+PostCSS Build takes a number of source files and passes them through PostCSS and outputs a single file.
 ```
 $ npm install -g postcss-build --save-dev
 
@@ -14,16 +18,17 @@ $ postcssbuild --src main.css --output main.min.css --plugins [ "autoprefixer", 
 Configuration file in JSON or CommonJS.  
 
 -d or --dir  
-Source directory.  
+Source directory as string or directories as array. This is recursive.
+
+-e or --ext
+When in dir mode, will only process file extensions specified.
+Defaults to ".css".
 
 -h or --help  
-Displays help text  
+Displays help text .
 
--s or --src  
-Path to a single source file or an array of paths to source files, where the array will be processed in sequence. --src overrules --dir;
-
--t or --options  
-Plugin options.
+-n or --notify  
+Show os notifications.
 
 -o or --output  
 Path to output file.
@@ -31,8 +36,14 @@ Path to output file.
 -p or --plugins  
 Array of postcss plugins names.
 
--n or --notify  
-Show os notifications.
+-s or --src  
+Path to a single source file or a list of arrays and strings with source file paths, where they will be processed in sequence. --src overrules --dir.
+
+-t or --options  
+Plugin options.
+
+-w or --watch
+Recursively watch a directory for changes.
 
 
 ### Config
@@ -42,14 +53,33 @@ CLI arguments overrule config.
 
 Example
 ```
-{
-  "notify": true,
+module.exports = {
+	"notify" : true,
 
-  "dir": "src/styles/",
+	"ext": ".css",
 
-  "output" : dist/styles/main.css,
+	"watch" : "example/src/",
 
-	"plugins": [ "autoprefixer", "cssnano" ],
+	"src": [
+		"example/src/main.css",
+		[
+			"example/src/about/about1.css",
+			"example/src/about/about2.css"
+		],
+		[
+			"example/src/home/home1.css",
+			"example/src/home/home2.css"
+		],
+		"example/src/content.css",
+	],
+
+	"output": "example/css/main.min.css",
+
+	"plugins": [
+	"autoprefixer",
+	"precss",
+	// "cssnano"
+	],
 
 	"options": {
 		"autoprefixer": {
@@ -59,9 +89,11 @@ Example
 
 		"cssnano": { "safe": true }
 	}
-}
+};
 ```
 
+## Example
+npm start
 
 ## Change Log
 All notable changes to this project will be documented in CHANGELOG.md.
