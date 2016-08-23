@@ -38,6 +38,7 @@ import {
 		WATCH
 	} = config(process.argv);
 
+	// memorization
 	let changedFile;
 	let memoiseFiles = {};
 
@@ -49,7 +50,6 @@ import {
 			.then(function (result) {
 
 				if (result.messages.length > 0) {
-					//if ( result.map ) fs.writeFileSync('docs/styles/app.uikit.map', result.map);
 					errorReporter(NOTIFY, result.messages.map(mes => {
 						return {
 							pos:  mes.line && mes.column ? `Line ${mes.line}:${mes.column}` : '',
@@ -128,7 +128,8 @@ import {
 		}
 	}
 
-	function wathFiles () {
+
+	function watchFiles () {
 		wathchingMessage(WATCH);
 		watch.createMonitor(WATCH, function (monitor) {
 			monitor.files[`${WATCH}`];
@@ -148,8 +149,8 @@ import {
 		});
 	}
 
-	run();
 
-	if (WATCH) wathFiles();
+	run();
+	if (WATCH) watchFiles();
 
 })();
