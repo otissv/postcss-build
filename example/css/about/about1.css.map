@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/about/about1.css"],"names":[],"mappings":"AAAA;EACE,cAAc;;CAEf","file":"about1.css","sourcesContent":[".about1 {\n  display: none;\n\n}\n"]}

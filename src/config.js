@@ -23,27 +23,36 @@ export default function config (processArg) {
   // Argument constants
   const EXT = argv.ext || argv.e || getConfig('ext') || '.css';
   const DIR = argv.dir || argv.d || getConfig('dir');
-  // const MAP = argv.map || argv.m || getConfig('map');
+  const FROM = argv.from || argv.f || getConfig('from');
+  const MAP = argv.map || argv.m || getConfig('map');
   const NOTIFY = argv.notify || argv.n || getConfig('notify');
   const OPTIONS = argv.options || argv.opts || getConfig('options');
   const OUTPUT = argv.output || argv.o || getConfig('output');
-  const OUTPUT_DIR = OUTPUT.substring(0, OUTPUT.lastIndexOf('/'));
+  const TO = argv.to || argv.t || getConfig('to');
   const PLUGINS = argv.plugins || argv.p || getConfig('plugins');
   const SOURCE = argv.src || argv.s || getConfig('src');
   const WATCH = argv.watch || argv.w || getConfig('watch');
+  const DEST = TO
+    ? TO
+    : OUTPUT
+    ? OUTPUT.match(/(.*)[\/\\]/)[1]||''
+    : null;
 
   // If no source or exit files print help text
-  if ((DIR == undefined && SOURCE == undefined) || OUTPUT == undefined) {
+  if ((DIR == undefined && SOURCE == undefined) || DEST == undefined) {
     help();
   }
 
   return {
    EXT,
+   DEST,
    DIR,
+   FROM,
+   MAP,
    NOTIFY,
    OPTIONS,
    OUTPUT,
-   OUTPUT_DIR,
+   TO,
    PLUGINS,
    SOURCE,
    WATCH

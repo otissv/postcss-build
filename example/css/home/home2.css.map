@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/home/home2.css"],"names":[],"mappings":";AACA;EACE,mBAAmB;CACpB;;AAED;EACE,UAAU;CACX","file":"home2.css","sourcesContent":["\n.home2 {\n  position: relative;\n}\n\n.home3 {\n  top: 50px;\n}\n"]}

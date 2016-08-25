@@ -7,20 +7,6 @@ export function flatten (arr) {
 }
 
 
-// forEach async
-export function forEachPromise (fn) {
-  return function (arr) {
-    let contents = arr.map((item, index) => {
-      return new Promise((resolve) => {
-        fn(resolve, item, index, arr);
-      });
-    });
-
-    return Promise.all(contents).then(res => [...new Set(res)]);
-  };
-}
-
-
 // Create directories
 export function mkDir (paths) {
   const {

@@ -3,7 +3,7 @@ module.exports = {
 
 	"ext": ".css",
 
-	"watch" : "example/src/",
+	// "watch" : "example/src/",
 
 	"src": [
 		"example/src/main.css",
@@ -18,7 +18,11 @@ module.exports = {
 		"example/src/content.css",
 	],
 
-	"output": "example/css/main.min.css",
+	// "output": "example/css/main.min.css",
+
+	"from": "example/src",
+	"to": "example/css",
+	"map" : { inline: false },
 
 	"plugins": [
 	"autoprefixer",

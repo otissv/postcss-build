@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/main.css"],"names":[],"mappings":"AAAA;CACC,qBAAqB;CACrB,cAAc;CACd,UAAU;CACV,gBAAgB;CAChB","file":"main.css","sourcesContent":[".main {\n\tdisplay: -webkit-box;\n\tdisplay: flex;\n\tcolor:red;\n\tcontent: 'otis';\n}\n"]}

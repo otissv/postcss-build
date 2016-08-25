@@ -1,11 +1,11 @@
 import glob from "glob";
 import watch from 'watch';
-import process from 'process';
+import runProcess from './run-process';
 import config from './config';
+import mapPromise from 'map-async-promise';
 import { wathchingMessage } from './messages.js';
 import {
 	flatten,
-	forEachPromise,
 	mkDir
 } from './utils';
 
@@ -16,22 +16,25 @@ import {
 	const {
 		EXT,
 		DIR,
-		OUTPUT_DIR,
+		TO,
 		SOURCE,
 		WATCH
 	} = config(process.argv);
 
-	const runProcess = process(config(process.argv));
+	const {
+		proccessFiles,
+		setChangedFile
+	} = runProcess(config(process.argv));
 
 	// Make directories
-	mkDir([ OUTPUT_DIR ]);
+	mkDir([ TO ]);
 
 
 	function run() {
 		if (SOURCE) {
 			Array.isArray(SOURCE)
-			? runProcess.getFileContents(null, SOURCE)
-			: runProcess.getFileContents(null, [SOURCE]);
+			? proccessFiles(null, SOURCE)
+			: proccessFiles(null, [SOURCE]);
 
 		} else {
 			if (Array.isArray(DIR)) {
@@ -39,12 +42,12 @@ import {
 					glob(`${file}/**/*${EXT}`, {}, (err, paths) => resolve(paths));
 				};
 
-				forEachPromise(getFilePaths)(flatten(DIR))
-					.then(results => runProcess.getFileContents(null, results));
+				mapPromise(getFilePaths)(flatten(DIR))
+					.then(results => proccessFiles(null, results));
 
 
 			} else {
-				glob(`${DIR}/**/*${EXT}`, {}, runProcess.getFileContents);
+				glob(`${DIR}/**/*${EXT}`, {}, proccessFiles);
 			}
 		}
 	}
@@ -55,12 +58,12 @@ import {
 		watch.createMonitor(WATCH, function (monitor) {
 			monitor.files[`${WATCH}`];
 			monitor.on("created", function (f, stat) {
-				runProcess.setChangedFile = f;
+				setChangedFile(f);
 				run();
 			});
 
 			monitor.on("changed", function (f, curr, prev) {
-				runProcess.setChangedFile = f;
+				setChangedFile(f);
 				run();
 			});
 

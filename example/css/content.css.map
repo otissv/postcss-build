@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/content.css"],"names":[],"mappings":"AAAA;CACC,sBAAsB;CACtB","file":"content.css","sourcesContent":[".content{\n\tbackground-color: red;\n}\n"]}
