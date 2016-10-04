@@ -1,12 +1,15 @@
 module.exports = {
+
 	"notify" : true,
 
 	"ext": ".css",
 
 	// "watch" : "example/src/",
+	//
+	"before": ["example/src/main.css"],
+	"after": {"example/src/content.css"},
 
 	"src": [
-		"example/src/main.css",
 		[
 			"example/src/about/about1.css",
 			"example/src/about/about2.css"
@@ -15,7 +18,7 @@ module.exports = {
 			"example/src/home/home1.css",
 			"example/src/home/home2.css"
 		],
-		"example/src/content.css",
+
 	],
 
 	// "output": "example/css/main.min.css",
